@@ -1,0 +1,1050 @@
+\documentclass{article}
+%\documentclass{book}
+%\documentclass[12pt,a4paper,reqno]{amsart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{verbatim}
+\usepackage{amscd}
+\usepackage{enumerate}
+\usepackage{siunitx}
+\usepackage{framed}
+\usepackage{geometry}
+%\usepackage{showkeys}  
+%\usepackage{mathabx}
+%\usepackage[pdftex,pdfpagelabels]{hyperref}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{bm}
+
+\numberwithin{equation}{section}
+\usepackage{mathtools}%                  http://www.ctan.org/pkg/mathtools
+\usepackage[tableposition=top]{caption}% http://www.ctan.org/pkg/caption
+\usepackage{booktabs,dcolumn}%           http://www.ctan.org/pkg/dcolumn + http://www.ctan.org/pkg/booktabs
+
+\DeclareMathOperator*\swan{swan}
+\DeclareMathOperator*\cond{cond}
+\DeclareMathOperator*\Gal{Gal}
+\newcommand{\FT}{\mathrm{FT}}
+\newcommand{\Kl}{\mathcal{K}\ell}
+
+\newenvironment{statement}[1]{\smallskip\noindent\color[rgb]{1.00,0.00,0.50} {\bf #1.}}{}
+\allowdisplaybreaks[1]
+
+% Commonly Used Blocks
+%% Theorem Definitions
+\theoremstyle{definition}
+\newtheorem{thm}{Theorem}[subsection]
+\newtheorem{defn}{Definition}[subsection]
+\newtheorem{cor}{Corollary}[thm]
+\newtheorem{ex}[thm]{Example}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{hypothesis}[thm]{Hypothesis}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{conjecture}[thm]{Conjecture}
+\newtheorem{principle}[thm]{Principle}
+\newtheorem{claim}[thm]{Claim}
+\newtheorem{note}{Note}[subsection]
+\newtheorem{ax}{Axiom}[thm]
+%% Vectors 
+\newcommand{\V}{\mathbf{v}}
+\newcommand{\U}{\mathbf{u}}
+\newcommand{\W}{\mathbf{w}}
+\newcommand{\N}{\mathbf{n}}
+\renewcommand{\r}{\mathbf{r}}
+\newcommand{\tv}[2]{\langle #1, #2 \rangle}
+\newcommand{\ttv}[3]{\langle #1, #2, #3 \rangle}
+\newcommand{\len}[1]{|#1|}
+\newcommand{\cross}[2]{#1 \times #2}
+\newcommand{\I}{\hat{\textbf{\i}}}
+\newcommand{\J}{\hat{\textbf{\j}}}
+\newcommand{\K}{\hat{\textbf{k}}}
+\newcommand{\vx}{\vec{x}}
+\newcommand{\vy}{\vec{y}}
+\newcommand{\vF}{\vec{F}}
+\newcommand{\vpi}{\vec{\pi}}
+\newcommand{\vPhi}{\vec{\Phi}}
+%% Calculus
+\newcommand{\dif}[1][]{\frac{\text{d}#1}{\text{dx}}}
+\newcommand{\den}[1][]{\text{d}#1}
+%% Analysis 
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\renewcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\B}{\mathcal{B}}
+\renewcommand\Re{{\operatorname{Re}}}
+\renewcommand\Im{{\operatorname{Im}}}
+
+\DeclareMathOperator{\nul}{Nul}
+\DeclareMathOperator{\spa}{Span}
+\DeclareMathOperator{\row}{Row}
+\DeclareMathOperator{\col}{Col}
+
+%% Relational Operator Spacing Patch
+\let\oldforall\forall
+\let\oldexists\exists
+\renewcommand{\forall}{\mathrel{\oldforall}}
+\renewcommand{\exists}{\mathrel{\oldexists}}
+%% Linear Algebra
+\newcommand{\x}{\times}
+\newcommand{\twobytwomatrix}[4]{\begin{bmatrix}
+		#1 & #2 \\
+		#3 & #4 \\
+\end{bmatrix}}
+\newcommand{\floor}[1]{\lfloor #1\rfloor}
+\newcommand{\indicator}[1]{ \mathbbm{1}_{\{#1\}} }
+\newcommand{\sumin}{\sum_{i=1}^n}
+\newcommand{\prodin}{\prod_{i=1}^n}
+\newcommand{\union}{\bigcup}
+\newcommand{\Union}[2]{\union_{#1=1}^{#2}}
+\newcommand{\intersection}{\bigcap}
+\newcommand{\Intersection}[2]{\intersection_{#1=1}^{#2}}
+\newcommand{\requires}{\Leftarrow}
+\newcommand{\Sum}[2]{\sum_{#1=1}^{#2}}
+\newcommand{\Prod}[2]{\prod_{#1=1}^{#2}}
+\newcommand{\basis}{\{\mathbf{v}_1, \mathbf{v}_2, ... , \mathbf{v}_n\}}
+\newcommand{\ds}{\bigoplus}
+%\parindent 0mm
+%\parskip   5mm 
+
+\usepackage{mdframed, xcolor}
+\newtheoremstyle{adefn}{3pt}{3pt}{}{}{\bfseries}{.}{1em}{{\color{magenta}\rule{\linewidth}{0.4pt}}}
+\theoremstyle{adefn}
+\newtheorem{pdef}{Definition}
+
+\title{MA265 Lecture Notes}
+\author{Ryan Wans}
+
+\begin{document}
+	\maketitle 
+	\tableofcontents
+	\pagebreak
+	
+	\section{Linear Equations in Algebra}
+	
+	\subsection{Linear Independance}
+	Recall that \emph{linear independence} requires there only existing the trivial solution to the homogeneous combination $x_1\mathbf{v}_1 + \cdots = 0$.
+	Let's inspect some cases:
+	\begin{enumerate}
+		\item The linear combination of just one vector $\{\mathbf{v}_1\}$ can be any scalar $c$ such that $c\mathbf{v}_1 = 0$. This requires one of the two operands to be zero. Therefor \textbf{v} must be linearly independent if not equal zero and linearly dependent if equal to zero. 
+		\item If we have two vectors $\mathbf{v}_1, \mathbf{v}_2$, which are they linearly independent? Let's start by assuming both vectors are nonzero to maintain finite solutions. Assume the homogeneous linear combination is nontrivial $c_1, c_2 \neq 0$. If we divide by $c_1$, we get $\mathbf{v}_1 + (c_2 / c_1) \mathbf{v}_2 = 0$. Therefor in order for the system to be linearly independent $\mathbf{v}_1 = (-c_2 / c_1)\mathbf{v}_2$. 
+		\item The final case is a set of $n$ vectors. If the set $S$ is linearly independent, $\exists c_1\mathbf{v}_1 +  \cdots, \mathbf{v}_n c_n = 0$. This must mean that $\exists \mathbf{v}_k \in \hbox{span}\{\mathbf{v}_1 , \ldots, \mathbf{v}_n\}$. I.e. one of the vectors in a linear combination of the others. 
+	\end{enumerate}
+	\begin{framed}
+		\begin{statement}{1}
+			If $\vec{0} \in \{\mathbf{v}_1, \ldots, \mathbf{v}_n\}$, then the set is linearly dependent. 
+		\end{statement}\\
+		\begin{statement}{2}
+			If $\{\mathbf{v}_1, \ldots, \mathbf{v}_p\} \subseteq \R^n$ and $p > n$ then the set is linearly dependent. 
+		\end{statement}
+	\end{framed}
+	
+	\subsection{Linear Transformations}
+	Suppose we have some matrix $A$ which is $2 \times 3$, allowing it to take in vectors from $\R^3$ and output a vector in $\R^2$. Generalized, $A: n \times m$ means that $\mathbf{x} \in \R^m$, $A\mathbf{x} \in \R^n$.
+	\begin{defn}
+		A transformation $T: \R^n \to \R^m$ is a rule that assigns to each vector $\mathbf{x} \in \R^n$ a new vector $T\mathbf{x} \in \R^m$.
+	\end{defn}
+	\begin{enumerate}
+		\itemsep0em 
+		\item \textbf{Domain.} Inputs $\R^n$
+		\item \textbf{Codomain.} Ambient space of possible outputs in $\R^m$
+		\item \textbf{Image.} $T\mathbf{x} \rightarrow$ image of \textbf{x} under $T$.
+		\item \textbf{Range.} The set of all possible images $\{ T\mathbf{x} \in \R^m \mid \mathbf{x} \in \R^n \}$. Subset of codomain. 
+	\end{enumerate}
+	\begin{ex}
+		We have some $T: \R^n \to \R^m$. We have a domain of $\R^n$ and a codomain of $\R^m$. We know that $\hbox{range}(T) \subseteq \R^m$. Suppose we have some $\U \in \R^m$, then is $\U \in \hbox{range}(T)?$. Perhaps we should ask does there exists a $A\mathbf{x} = \U$? 
+	\end{ex}
+	\begin{ex}[Shear Map]
+		$A$ is a $2 \times 2$ matrix and $T: \R^2 \to \R^2$. 
+		\begin{align*}
+			A = \begin{bmatrix}
+				1 & 2 \\ 0 & 1
+			\end{bmatrix},\quad T(x_1, x_2) = \begin{bmatrix}
+			1 & 2 \\ 0 & 1
+			\end{bmatrix}\begin{bmatrix}
+			x_1 \\ x_2
+			\end{bmatrix} = \begin{bmatrix}
+			x_1 + 2x_2 \\ x_2
+			\end{bmatrix}
+		\end{align*}
+	\end{ex}
+	
+	We are interpreting matrices as maps between different vector spaces, which will make up the second most important type of linear transformations in the course. We observe 2 important properties.
+	\begin{enumerate}
+		\itemsep0em
+		\item $T(\U + \V) = A(\U+ \V) = A\U + A\V$
+		\item $T(c\U) = A(c\U) = cA\U$
+	\end{enumerate}
+	Following are some important facts.
+	\begin{framed}
+		\begin{statement}{1}
+			Every matrix transformation is a linear transformation.
+		\end{statement}\\
+		\begin{statement}{2}
+			$T(\mathbf{0}) = \mathbf{0}$
+		\end{statement}\\
+		\begin{statement}{3}
+			$T(a\U + b\V) = aT(\U) + bT(\V)\quad \implies \hbox{linearity}$
+		\end{statement}
+	\end{framed}
+	Now we will observe the different kinds of linear transformations.
+	\begin{ex}[Contraction \& Dilation]
+		Contraction occurs when $0 < r \leq 1$ and dilation occurs when $r > 1$. Then we have some $T(\V) = r\V$.
+	\end{ex}
+	\begin{ex}[Rotation]
+		Rotations maintain linearity through their transformations. We define rotations in the following manner. 
+		$$A = \begin{bmatrix}
+			\cos\theta & -\sin\theta \\
+			\sin\theta & \cos\theta
+		\end{bmatrix}$$
+	\end{ex}
+	
+	\subsection{Matrix of Linear Transformations}
+	We need to define how the transformation $T$ and its matrix $A$ transform the standard unit vectors $\{ \mathbf{e}_1 \ldots \mathbf{e}_n \}$. 
+	\begin{thm}
+		Let $T: \R^n \to \R^m$ be any linear transformation. Then there exists a unique matrix $A$ such that $T(\U) = A\U$. In fact, the matrix $A$ has as its columns $[\ T(\mathbf{e}_1)\ \cdots\ T(\mathbf{e}_n)\ ]$. Thus the $j$th column of $A$ is the image of $\mathbf{e}_j$ under $T$. 
+	\end{thm}
+	\begin{proof}
+		Start with a vector $\U$ that is $n \x 1$ in size. We can express it as a linear combination of $\U = u_1\mathbf{e}_1 + \cdots + u_n\mathbf{e}_n$. Thus we get that $T(\U) = u_1T(\mathbf{e}_1) + \cdots + u_nT(\mathbf{e}_n)$. 
+	\end{proof}
+	We call $A$ the standard matrix. Thus we get that if we can uncover that a transformation is linear, we can find a matrix $A$ to define said transformation. 
+	\begin{framed}
+		\textbf{Readings.} Pages 78-80 of eText. Explore types of transformations.  
+	\end{framed}
+	\begin{thm}
+		Recall that for any linear transformation $T: \R^n \to \R^m$, $\exists!\ A \in M(m, n)$ s.t. $T(\V) = A\V$ where $\V \in \R^n$.
+	\end{thm}
+	\begin{defn}[One-to-One (Injective)]
+		A mapping $T: \R^n \to \R^m$ is said to be \textbf{one-to-one} if $\forall \mathbf{b} \in \R^m$ has at most one $\mathbf{x} \in \R^n$ such that $T(\mathbf{x}) = \mathbf{b}$. I.e. the system either has 0 or a unique solution. 
+	\end{defn}
+	\begin{defn}[Onto (Surjective)]
+		A mapping $T: \R^n \to \R^m$ is said to be \textbf{onto} ($\R^m$) if $\forall \mathbf{b} \in \R^m \exists \mathbf{x} \in \R^n, T(\mathbf{x}) = \mathbf{b}$. I.e. the system has atleast 1 solution. 
+	\end{defn}
+	Finding surjections is equivalent to asking an existence question. By trying to find an injection you are asking an uniqueness question. 
+	\begin{framed}
+		\begin{statement}{Onto}
+			If every row of $A$ contains a pivot, there will always exist at least one solution. 
+		\end{statement}\\
+		\begin{statement}{One-to-One}
+			If parameterized (i.e. $\hbox{rank}(A) > n$), then there must be infinite solutions and therefor cannot be one-to-one. 
+		\end{statement}
+	\end{framed}
+	\begin{thm}
+		If $T: \R^n \to \R^m$ the following are equal.
+		\begin{enumerate}
+			\itemsep0em
+			\item $T$ is one-to-one.
+			\item $T(\mathbf{x}) = \mathbf{0}$ has only the trivial solution. 
+			\item The columns of $A$ are linearly independent. 
+		\end{enumerate}
+	\end{thm}
+	\begin{proof}
+		Suppose $T(\mathbf{x}_1) = \mathbf{b}$ and $T(\mathbf{x}_2) = b$. Then we would have $T(\mathbf{x}_1 - \mathbf{x}_2) = \mathbf{b} - \mathbf{b} = 0$. Thus $\mathbf{x}_1 - \mathbf{x}_2 = 0$
+	\end{proof}
+	\begin{thm}
+		If $T: \R^n \to \R^m$ the following are equal.
+		\begin{enumerate}
+			\itemsep0em
+			\item $T$ is onto. 
+			\item $A\mathbf{x} = b$ is always consistent
+			\item $\hbox{Span}\{ \mathbf{a}_1 \ldots \mathbf{a}_n \} = \R^m$ (column space of A spans $\R^m$).
+			\item Each row has a pivot ($\hbox{rank}(A) = m$). 
+		\end{enumerate}
+	\end{thm}
+	\begin{ex}
+		$T(x_1, x_2) = (3x_1 + x_2, 5x_1 + 7x_2, x_1 + 3x_2)$ gives us the following matrix...
+		$$A = \begin{bmatrix}
+			3 & 1 \\ 5 & 7 \\ 1 & 3
+		\end{bmatrix}$$
+		By inspection, we have determined that the columns of $A$ are linearly independent, thus satisfying the condition that $A$ is one-to-one. Again by inspection, we see that it is not possible for $A$ for have more than 2 pivots, making it not onto. 
+	\end{ex}
+	\begin{framed}
+		\textbf{Properties of Matrix Multiplication}
+		\begin{enumerate}
+				\item $A(BC) = (AB)C$ 
+				\item $A(B+C) = AB = AC$
+				\item $(B+C)A = BA + CA$
+				\item $c(AB) = (cA)B = A(cB)$
+				\item $IA = A = AI$
+				\item $AB \neq BA$
+				\item $AB = AC $ does NOT imply $B = C$
+				\item $AB = 0 $ does NOT imply $A = 0$ or $B = 0$
+		\end{enumerate}
+	\end{framed}
+	\begin{thm}[Powers of Matrices]
+		$A^k = A \cdot A \cdots A$ and $A^0 = I_n$.
+	\end{thm}
+	\begin{thm}[Matrix Transposition]
+		If have some matrix $A$ such that 
+		\begin{align*}
+			A = \begin{bmatrix}
+				a & b & c \\
+				d & e & f \\
+				g & h & i
+			\end{bmatrix}\quad \hbox{then it's transpose is } A^T = \begin{bmatrix}
+			a & d & g \\
+			b & e & h \\
+			c & f & i
+			\end{bmatrix}
+		\end{align*}
+	\end{thm}
+	\begin{thm}
+		If $A, B$ are matrices of appropriate sizes, we have that
+		\begin{enumerate}
+			\item $(A^T)^T = A$
+			\item $(A+B)^T = A^T + B^T$
+			\item $(cA)^T = c(A^T)$
+			\item $(AB)^T = B^TA^T$
+		\end{enumerate}
+	\end{thm}
+	
+	\section{Matrix Algebra}
+	
+	\subsection{Inverses}
+	We are used to dealing with systems of the nature $A\mathbf{x} = \mathbf{b}$. How does one isolate \textbf{x} though without using division? Let's inspect the nature of square, invertible matrices.
+	\begin{defn}
+		If $A$ is $n \x n$ such that there exists another $n \x n$ matrix $B$ with the property that $AB = I_n = BA$. If this happens, we say that $A$ is invertible such that $B$ is its inverse and $A$ is nonsingular. If $A$ is not invertible, we call $A$ singular. 
+	\end{defn}
+	\begin{ex} We have $A, B$ such that
+		\begin{align*}
+			A = \begin{bmatrix}
+				2 & 5 \\ 3 & 7
+			\end{bmatrix} \quad B = \begin{bmatrix}
+			-7 & 5 \\ 3 & -2
+			\end{bmatrix}
+		\end{align*}
+		We can compute that $AB = I_2 = BA$ such that $B$ is an inverse of $A$. We notate this as $A = B^{-1}$. In general we see that 
+		\begin{align*}
+			A = \begin{bmatrix}
+				a & b \\ c & d
+			\end{bmatrix} \Rightarrow A^{-1} = \begin{bmatrix}
+			d & -b \\ -c & a
+			\end{bmatrix}
+		\end{align*}
+	\end{ex}
+	\begin{thm}
+		If we have some matrix $A$ of the form above, we have the following property
+		\begin{enumerate}
+			\item If $\det A \neq 0$, we have that $A^{-1} = (\det A)^{-1} \begin{bmatrix}
+			d & -b \\ -c & a
+			\end{bmatrix}$.
+			\item If $\det A = 0$, then the matrix is singular
+		\end{enumerate}
+	\end{thm}
+	We observe the following properties
+	\begin{enumerate}
+		\item If $A$ is invertible, then $A^{-1}$ is also invertible
+		\item $(A^{-1})^{-1} = A$
+		\item If $A$ is invertible, then $A^T$ is also invertible
+		\item $(A^T)^{-1} = (A^{-1})^T$
+	\end{enumerate}
+	\begin{thm}
+		An $n\ x n$ matrix is invertible iff $A$ can become $I_n$ from some EROs. Applying the same EROs will achieve $A^{-1}$ from $I_n$. 
+	\end{thm}
+	\begin{thm}[Algo. for $n \geq 3$]
+		You have to row reduce the matrix $[\ A \mid I_n\ ]$ down to $[\ I_n \mid A^{-1}\ ]$
+	\end{thm}
+	\begin{thm}[Invertible Matrix Theorem]
+		Get prepared for a long theorem. An $n \x n$ matrix $A$ has the following equivalent properties:
+		\begin{enumerate}
+			\item $A$ is invertible. 
+			\item $A$ is row-equivalent to $I_n$.
+			\item $A$ has $n$ pivots. 
+			\item $A\mathbf{x} = \mathbf{0}$ has only the trivial solution.
+			\item The columns of $A$ are linearly independent.
+			\item The Lin. Trans. $T(\mathbf{x}) = A\mathbf{x}$ is injective.  (follows 4)
+			\item $A\mathbf{x} = \mathbf{b}$ has one solution $\forall \mathbf{b}$. 
+			\item The columns of $A$ span $\R^n$. (follows 7)
+			\item $T$ is surjective. 
+			\item $\exists C$ s.t. $AC = I_n$.
+			\item $\exists D$ s.t. $DA = I_n$.
+			\item $A^T$ is invertible. 
+		\end{enumerate}
+	\end{thm}
+	Finally, if $T: \R^n \to \R^n$ is an \emph{invertible} linear tranformations if there exists $S: \R^n \to \R^n$ if $\forall \V \in \R^n$, $T(S(\V)) = \V = S(T(\V))$.
+	\begin{thm}
+		If $T: \R^n \to \R^n$ is a linear transformation with matrix $A$, $T$ is invertible implies that $A$ is invertible as a matrix. The inverse transformation is given by the inverse matrix of $A$. 
+	\end{thm}
+	
+	\subsection{Subspaces of $\R^n$}
+	\begin{defn}[Subspace Property]
+		A subset $S \subseteq \R^n$ is called a linear subspace iff (1) $0 \in S$, (2) $\U + \V \in S \forall \U, \V \in S$, and (3) $c\U \in S \forall \U \in S, c \in \R$
+	\end{defn}
+	\begin{ex}
+		The span of one nonzero vector will be a subspace. The span of $\{ \V_1, \V_2 \}$ is a subspace of $\R^2$, similar to that of a plane through the origin. Thus we have that $S = \hbox{span}\{ \V_1, \ldots, \V_p \}$.
+	\end{ex}
+	\begin{ex}[Column Space]
+		If we have some $A$ that is $m \x n$, then Col$(A)$ is the set of all linear combinations (span) of the columns of $A$. Thus Col$(A) \subseteq \R^m$.  
+	\end{ex}
+	\begin{ex}[Nullspace]
+		Nul$(A)$ is the set of all solutions to the homogeneous equation $A\mathbf{x} = \mathbf{0}$ where $\mathbf{x} \in \R^n$. This set is a subspace of $\R^n$. 
+	\end{ex}
+	\begin{lemma}
+		$\mathbf{b} \in \text{Col}(A) \implies A\mathbf{x} = \mathbf{b}$. 
+	\end{lemma}
+	
+	\begin{framed}
+		\textbf{Assigned Reading: } Pgs. 114-117
+	\end{framed}
+	
+	To check if a vector $\V$ belongs to the column space $\V \in \text{Col}(A)$, one must verify that $A\V = \mathbf{b}$. 
+	
+	\begin{defn}[Basis]
+		A basis for a subspace $H \subset \R^n$ is a set of $n$ linearly independent vector that span $H$. 
+	\end{defn}
+	\begin{ex}[Full-Space Basis]
+		If $H = \R^n$, the basis is the columns of the matrix $I_n$. Recall that if $A: m \x n$, then $A$ is invertible $\iff$ Col$(A)$ span $\R^n$ $\iff$ columns of $A$ are L.I.
+	\end{ex}
+	\begin{ex}[Nullspace Basis]
+		We take $H := \text{Nul}(A)$ where $A$ is defined on the chalkboard in class. Recall that Nul$(A) = \{ A\mathbf{x} = \textbf{0} \mid \mathbf{x} \in \R^m \}$. We just have to parameterize the columns that do not contain pivots in $A$. The basis for the nullspace is the set of parameterized vectors. 
+	\end{ex}
+	\begin{ex}[Column Space Basis]
+		We must use the pivot columns of the row-reduced matrix to form a set of $n$ vectors in $\R^n$ to span it. We can actually use the same columns in the original matrix to form the basis as well. 
+	\end{ex}
+	
+	\subsection{Dimension}
+	Why do we care about basis? If $B$ is a bsis for some space $H$, than every $h \in H$ has a unique linear combination of every $b \in B$. Uniqueness is the case because bases are required to be linearly independent. 
+	\begin{defn}
+		$B$ is a basis for $H$, $\V \in H$, ``coordinates of $\V$ relative to B''. We have that $[\V]_B = \mathbf{c} \in \R^p$.
+	\end{defn}
+	Thus we can shift coordinates from one basis into using the coordinates of another basis. 
+	
+	\begin{defn}[Isomorphism]
+		A linear, injective, and surjective transformation $\mathbf{x} \mapsto [\mathbf{x}]_B$. This allows you to work in output space $\R^p$ instead of $H$ (subspace). \textcolor{red}{EXPLAIN}
+	\end{defn}
+	\begin{defn}[Dimension]
+		The number of elements in a basis $B$ of a subspace $H$ is called $\dim(H)$. 
+	\end{defn}
+	\begin{cor}
+		This does not depend on $B$. 
+	\end{cor}
+	\begin{ex} The dimensions of the zero vector is zero. 
+		\begin{enumerate}
+			\itemsep0em
+			\item span$\{\V_1\}$ is the basis for a line $\therefore \dim = 1$.
+			\item $\R^n$ has $\dim = n$
+		\end{enumerate}
+	\end{ex}
+	\begin{defn}[Rank]
+		$$\hbox{rank}(A) = \dim(\hbox{Col}(A))$$
+		This is also known as the number of rows containing pivots when fully row-reduced. Recall that the pivot columns of $A$ form the basis for Col$(A)$. 
+	\end{defn}
+	\begin{claim}[]
+		Recall that Nul$(A) = \{ \mathbf{x} \in \R^n \mid A\mathbf{x} = \mathbf{0} \}$. We know that the dimension of the nullspace of $A$ depends on the number of free variables present when $A$ is reduced. We can express this as 
+		$$\text{Free Vars.} = n - \hbox{rank}(A)$$
+	\end{claim}
+	\begin{thm}[Rank-Nullity]
+		rank$(A)$ + $\dim(\text{Nul}(A)) = n$ for $A: m \x n$. We can also state that the $\dim(\text{Null}(A))$ if the number of non-pivot columns. 
+	\end{thm}
+	\begin{defn}[Nullity]
+		Nullity is simply the dimension of the nullspace/kernal of $A$.
+	\end{defn}
+	\begin{thm}[Rank \& Invertibility]
+		TFAE
+		\begin{enumerate}
+			\itemsep0em
+			\item $A$  is invertible 
+			\item The columns of $A$ form a basis of $\R^n$
+			\item Col$(A) = \R^n$
+			\item rank$(A) = n$ or $A$ is full rank
+			\item $\dim(\text{Nul(A)}) = 0$
+			\item Nul$(A) = \{ \mathbf{0} \}$
+		\end{enumerate}
+	\end{thm}
+	
+	\section{Determinants}
+	
+	\subsection{Introduction \& Properties of Dets. }
+	\begin{defn}
+		We examine the following case for $n \geq 3$. $A := [a_{ij}]$ is $n \x n$. We define $A_{ij}$ as $A$ with row $i$ and column $j$ removed, thus making it a $(n-1) \x (n-1)$ matrix. 
+		\begin{align*}
+			\det(A) = \sum_{j=1}^n (-1)^{j + 1} a_{ij} \det(A_{ij}) \tag{7.1}
+		\end{align*}
+	\end{defn}
+	\begin{thm}
+		If $A$  is $n \x n$ then $A$ is invertible $\iff \det(A) \neq 0$. 
+	\end{thm}
+	\begin{note}[Notation]
+		If instead of using bracket matrices for $A$ and instead use bars, it denotes the determinant.
+	\end{note}
+	\begin{defn}[Co-factor]
+		If $A \in M(2, 2)$ then $C_{ij} = (-1)^{i+j}\det A_{ij}$. Using this, we can redefine the determinant as
+		$$\det A = a_{11}C_{11} + a_{12}C_{12} + \cdots + a_{1n}C_{1n}$$
+	\end{defn}
+	\begin{thm}[Co-factor Expansion]
+		Basically you can adjust the co-factor expansion defn. of the determinant to perform the determinant of $A$ upon any desired row or column!
+	\end{thm}
+	\begin{cor}[Det of Triangular Matrix]
+		If $A$ is triangualr then the determinant of $A$ is equal to the product of the diagonal matrices. 
+	\end{cor}
+	\begin{thm}
+		If you have two $n \x n$ matrices $A$ and $B$, then $\det(AB) = \det A \cdot \det B$.
+	\end{thm}
+	We will now study how ERO's effect the determinant of a matrix. Suppose we have some matrix $A$ and apply an ERO such that we now have $B$. Well if we perform this same ERO on the identity matrix $I$ and get some matrix $E$ that just has one change, we can express $B$ as $EA$. Also, $\det B = \det E \det A$.
+	We call $B$ a permutation matix.
+	\begin{thm}[Permutations]
+		If we perform a permutation operation on $A$ such that two rows get swapped, the determinant of the permutation matrix $E$ becomes $-1$. 
+	\end{thm}
+	\begin{thm}[Row Scaling]
+		If we scale some row in $E$ by $k$, then $\det E = k$. 
+	\end{thm}
+	\begin{cor}
+		If we scale every element of $A$ by $k$, then $\det A = k^2$. 
+	\end{cor}
+	\begin{thm}[Row Addition]
+		If we apply a scalar row addition operation to any row of the matrix $A$, it will not alter the determinant such that $\det E = 1$.
+	\end{thm}
+	\begin{framed}
+		\textcolor{magenta}{
+			\begin{enumerate}
+				\itemsep0em
+				\item \textbf{Permutation:} Flips sign of $\det E$
+				\item \textbf{Scalar Mult:} Scales $\det E$ by some factor $k$
+				\item \textbf{Addition:} No change in $\det E$
+			\end{enumerate}
+		}
+	\end{framed}
+	\begin{thm}
+		$A \in M(n, n) \implies A^T \in M(n, n)$ and $\det(A^T) = \det(A)$. Thus it holds that swapping rows and columns should be preserved. This allows us to define a new set of rules known as the Elementary Column Operations (ECOs). 
+	\end{thm}
+	
+	\subsection{Cramer's Rule, Volume, Lin. Trans.}
+	Because determinants are only applicable to square matrices, we will restrict our focus of $A$ in $A\mathbf{x} = \mathbf{b}$ to $n \x n$. Typically if $A$ is invertible, we can simply solve $\mathbf{x} = A^{-1}\mathbf{b}$. This is sometimes too tedious, though, so we will explore other methods. 
+	\begin{defn}
+		Suppose $A: n \x n$ matrix and $\mathbf{b} \in \R^n$. Then $A_j(\mathbf{b})$ is the $n \x n$ matrix obtained by replacing the $j$-th column with \textbf{b}. 
+	\end{defn}
+	\begin{ex}
+		\begin{align*}
+			A = \begin{bmatrix}
+				3 & -1 \\ -5 & 4
+			\end{bmatrix}\quad \mathbf{b} = \begin{bmatrix}
+			6 \\ 8
+			\end{bmatrix} \\ 
+			A_1(\mathbf{b}) = \begin{bmatrix}
+				6 & -2 \\ 8 & 4
+			\end{bmatrix},\quad A_2(\mathbf{b}) = \begin{bmatrix}
+				3 & 6 \\ -5 & 8
+			\end{bmatrix}
+		\end{align*}
+	\end{ex}
+	\begin{thm}[Cramer's Rule]
+		If $A$ is invertible and $n \x n$ and $\mathbf{b} \in \R^n$, then $A\mathbf{x} = \mathbf{b}$ has a unique solution. The solution is given by
+		\begin{align*}
+			\mathbf{x}_j = \frac{\det(A_j(\mathbf{b}))}{\det(A)}
+		\end{align*}
+	\end{thm}
+	\begin{ex}
+		We are given that 
+		\begin{align*}
+			A = \begin{bmatrix}
+				3 & -2 & 6 \\ 
+				-5 & 4 & 8
+			\end{bmatrix}
+		\end{align*}
+		We can see that $\det A = 2$, $\det A_1(\mathbf{b}) = 40$, and $\det A_2(\mathbf{b}) = 54$. Now we can apply Cramer's rule such that 
+		\begin{align*}
+			\mathbf{x}_1 = \frac{40}{2} = 20 \\ 
+			\mathbf{x}_2 = \frac{54}{2} = 27
+		\end{align*}
+	\end{ex}
+	\begin{ex}[With Parameter]
+		We are given that 
+		\begin{align*}
+			A = \begin{bmatrix}
+				3s & -2 & 4 \\ 
+				-6 & s & 1
+			\end{bmatrix}
+		\end{align*}
+		What $s \in \R$ will give us a unique solution? We see that 
+		\begin{align*}
+			A_1(\mathbf{b}) = \begin{bmatrix}
+				4 & -2 \\ 1 & s
+			\end{bmatrix},\quad A_2(\mathbf{b}) = \begin{bmatrix}
+			3s & 4 \\ -6 & 1
+			\end{bmatrix}
+		\end{align*}
+		Oberserve that $\det A = 3(s-2)(s+2) \therefore s \neq \pm 2$, $\det(A_1(\mathbf{b})) = 4s + 2$, and $\det(A_2(\mathbf{b})) = 3s + 24$. We solve that 
+		\begin{align*}
+			\mathbf{x} = \begin{bmatrix}
+				\frac{4s+2}{3(s+2)(s-2)} \\ 
+				\frac{3s+24}{3(s+2)(s-2)}
+			\end{bmatrix}
+		\end{align*}
+	\end{ex}
+	Recall that $A_{ij}$ is the matrix $A$ with row $i$ and column $j$ deleted and that the cofactor $C_{ij} = (-1)^{i+j}\det(A_{ij})$. We can write that $C = [ C_{ij} ]$ (matrix of cofactors) and we get that
+	\begin{align*}
+		\text{adj}(A) &= C^T\\
+		&= [ C_{ij} ]^n_{i,j = 1}
+	\end{align*}
+	\begin{thm}
+		If $A$ is invertible and $\det A \neq 0$ then $A^{-1} = \frac{1}{\det(A)}\text{adj}(A)$. Thus we derive that \begin{align*}
+			\begin{bmatrix}
+				a & b \\ c & d
+			\end{bmatrix}^{-1} = \frac{1}{ad-bc}\begin{bmatrix}
+			d & -b \\ -c & a
+			\end{bmatrix}
+		\end{align*}
+	\end{thm}
+	\begin{thm}
+		If $A$ is $2 \x 2$ (respectively $3 \x 3$ matrix) then $|\det A|$ is the area (or volume) determined of the parallelogram (or parallelopiped) given by the columns of $A$. 
+	\end{thm}
+	Computing an inverse requires that you find the cofactor for every element in the matrix and then transpose it to get the adjoint matrix. Also note that $A\text{adj}(A) = (\det A)AA^{-1}$. So multiplying $A$ times the adjoint of $A$ yields a matrix with the determinant of $A$ down its main diagonal. 
+	\begin{ex}
+		Find $\det = \begin{bmatrix}
+			a & 0 \\ 0 & d
+		\end{bmatrix} = ad$. This is the area of a rectangle. 
+	\end{ex}
+	If $\mathcal{B} = \{ \mathbf{b}_1, \ldots, \mathbf{b}_n \}$ is a basis for $\R^n$ and $A$ is $\R^n \mapsto \R^m$, then $T(\mathbf{x}) = c_1 T(\mathbf{b}_1) + \cdots + c_n T(\mathbf{b}_n)$.
+	
+	\section{Vector Spaces}
+	
+	\subsection{Vector Spaces \& Subspaces}
+	\begin{defn}
+		A vector space $V$ is a collection of objects (vectors) with a field of scalars ($\R$ or $\C$) and 2 operations (addition and scalar multiplication) such that \begin{enumerate}[leftmargin=3cm]
+			\item[\textbf{Closure}] $\forall \U, \V \in V \exists (\U + \V) \in V$
+			\item[\textbf{Commutitivity}] $\forall \U, \V \in V, \U + \V = \V + \U$
+			\item[\textbf{Associativity}] $\forall \U, \V, \W \in V, \U + (\V + \W) = (\U + \V) + \W$
+			\item[\textbf{Identity}] $\forall \U \in V \exists \textbf{0} \in V$ s.t. $\U + \textbf{0} = \U$
+			\item[\textbf{Inverses}] $\forall \U \in V \exists (-\U) \in V$ s.t. $\U + (- \U) = \textbf{0}$
+			\item[\textbf{Closure}] $\forall \U \in V, c \in \R, c\U \in V$
+			\item[\textbf{Disribution}] $c(\U +_v \V) = c\U +_v c\V$
+			\item[\textbf{Reverse}] $(c +_{\mathbb{R}} d)\U = c\U +_v d\U$
+			\item[\textbf{Identity}] $\forall \U \in V, 1 \cdot \U = \U$
+		\end{enumerate}
+		One can see that the properties (except inverses) exists for both operations. 
+	\end{defn}
+	\begin{ex}
+		Let's inspect the set of $n$-degree polynomials $P_n$. We define the set $P_2 := \{ a_0 + a_1t = a_2t^2 \mid a_j \in \R \}$. Addition would be defined as the addition of the scalars of both polynomials. Scalar multiplication is also defined as scaling the scalars of each component of the polynomial. 
+	\end{ex}
+	\begin{ex}
+		Consider the set $M(m, n)$ of all $m \times n$ matrices. This is a vector space under matrix addition and scalar multiplication. 
+	\end{ex}
+	\begin{ex}
+		Consider \emph{any} set $D$. Then we define the vector space as the set $V := \{ f: D \to \R \}$ under point-wise addition and scalar multiplication. We have that $(f + g)(x) = f(x) + g(x)$ and $(cf)(x) = cf(x)$. 
+	\end{ex}
+	\begin{thm}
+		If we have some vector space $V(+, \cdot, \R)$, then TFAE
+		\begin{enumerate}
+			\item $0 \cdot \U = \textbf{0} \forall \U \in V$
+			\item $c\textbf{0} = \textbf{0} \forall c \in \R$
+			\item $(-\U) = (-1)\U \forall \U \in V$
+		\end{enumerate} 
+	\end{thm}
+	\subsubsection{Subspaces}
+	\begin{defn}
+		A subspace $H \subseteq V$ is a subset s.t. 
+		\begin{enumerate}
+			\item $\textbf{0} \in H$
+			\item $\forall \U, \V \in H, (\U + \V) \in H$
+			\item $\forall \U \in H, c \in \R, c\U \in H$
+		\end{enumerate}
+	\end{defn}
+	\begin{ex}
+		The subset $P_2 \subseteq P_3$ is a subspace of $P_3$ under the aforementioned operations. 
+	\end{ex}
+	\begin{ex}[Trivial Subspace]
+		The zero vecor $\{\textbf{0}\} \subseteq V$ is a subspace of $V$. 
+	\end{ex}
+	\begin{ex}
+		Even though $\R^2 \subseteq \R^3$, it is not a subspace. \textcolor{red}{EXPLAIN + COMPARE TO P}
+	\end{ex}
+	\begin{thm}
+		If $\textbf{v}_1, \ldots, \textbf{v}_p \in V$, then $\spa\{\textbf{v}_1, \ldots, \textbf{v}_p\}$ is a subspace of $V$. 
+	\end{thm}
+	We call $\spa\{\textbf{v}_1,\ldots \}$ the subspace generated by that respective set of vectors. Given any subspace $H$ of $V$, a generating set for $H$ is a set $\{\textbf{v}_1,\ldots\} \in H$ s.t. $H = \spa\{\textbf{v}_1,\ldots\}$. 
+	\begin{ex}
+		Let $H$ be the set of all vectors of the form $(a-3b, b-a, a, b)$. That is, let $H = \{(a-3b, b-a, a, b) \mid a, b \in \R\}$. We can expand this to become 
+		\begin{align*}
+			\begin{bmatrix}a-3b\\b-a\\a\\b\end{bmatrix} = a\begin{bmatrix}1\\-1\\1\\0\end{bmatrix} + b\begin{bmatrix}-3\\1\\0\\1\end{bmatrix} \implies 
+			H = \spa\left\{ \begin{bmatrix}1\\-1\\1\\0\end{bmatrix}, \begin{bmatrix}-3\\1\\0\\1\end{bmatrix}\right\}
+		\end{align*}
+		Thus we have that $H$ is a subspace of $\R^4$. 
+	\end{ex}
+	
+	\subsection{Null/Col/Row Spaces \& Linear Transformations}
+	\subsubsection{The Null Space}
+	It is typical for subspace of $\R^n$ to arrise in one of two ways: a) as the set of all solutions to a system of homogeneous linear equations or b) as the set of all linear combinations of certain specified vectors. 
+	\begin{defn}
+		The null space, or kernel, of an $m \x n$ matrix $A$, written as $\nul A  \text{ or} \ker A$, is the set of all solutions to the homogeneous equation. We have that 
+		$$\ker A = \{ \V \mid \V \in \R^n, A\V = \textbf{0} \}$$
+	\end{defn}
+	\begin{thm}
+		The null space of an $m \x n$ matrix $A$ is a subspace of $\R^n$. 
+	\end{thm}
+	\begin{ex}
+		Let $H$ be the set of all vectors in $\R^4$ whose coordinates $a, b, c, d$ satisfy the equations $a-2b+5c=d$ and $c-a=b$. Show that $H$ is a subspace of $\R^4$. We can reorganize the equations to solve for zero such that 
+		\begin{align*}
+			\begin{bmatrix}
+				1 & -2 & 5 & -1 & 0 \\ 
+				-1 & -1 & 1 & 0 & 0
+			\end{bmatrix}
+		\end{align*}
+		Recall that $H$ is the set of all solutions to this system. Therefore, by \textbf{Thm. 4.13} we have that $H$ is a subspace of $\R^4$.  
+	\end{ex}
+	\subsubsection{The Column Space}
+	Another important subspace associated with a matrix is it's column space. Whereas the nullspace is defined implicitely (through solving), the column spac of a matrix is defined explicitely. 
+	\begin{defn}
+		The column space of an $m \x n$ matrix $A$, written as $\col A$, is the set of all linear combinations of the columns of $A$. If $A = [\textbf{a}_1 \cdots \textbf{a}_n]$, then 
+		$$\col A = \spa \{\textbf{a}_1, \ldots, \textbf{a}_n\}$$
+	\end{defn}
+	\begin{thm}
+		$\col A$ of an $m \x n$matrix $A$ is a subspace of $\R^m$.
+	\end{thm}
+	Because $A\textbf{x}$ represents a linear combination of the columns of $A$, we can write that 
+	$$\col A = \{\textbf{b} \mid \textbf{b} = A\textbf{x}, \textbf{x} \in \R^n\}$$
+	This implies that $\col A$ is the range for the transformation $\textbf{x} \mapsto A\textbf{x}$.
+	\begin{ex}
+		Find a matrix $A$ such that $W = \col A$, given that
+		$$W = \left\{ \begin{bmatrix}
+			6a-b\\a+b\\-7a
+		\end{bmatrix} \mid a, b \in \R \right\} = \left\{ a\begin{bmatrix}
+			6 \\ 1 \\ -7
+		\end{bmatrix} + b\begin{bmatrix}
+			-1 \\ 1 \\ 0
+		\end{bmatrix} \right\} = \spa \left\{ \begin{bmatrix}
+			6 \\ 1 \\ -7
+		\end{bmatrix}, \begin{bmatrix}
+			-1 \\ 1 \\ 0
+		\end{bmatrix} \right\}$$
+		Since $\col A$ is the span of the columns of $A$, these two vectors will combine to form the columns of $A$. 
+	\end{ex}
+	\begin{claim}
+		The column space of an $m \x n$ matrix $A$ is all of $\R^m$ iff the equation $A\textbf{x} = \textbf{b}$ has a solution $\forall \textbf{b} \in \R^m$.
+	\end{claim}
+	\begin{tabular}{|p{5cm} p{5cm}|}
+		\hline
+		$\nul A$ & $\col A$ \\ 
+		\hline
+		\textbf{1.}\ $\nul A$ is a subspace of $\R^n$ & \textbf{1.}\ $\col A$ is a subspace of $\R^m$ \\ 
+		\textbf{2.}\ $\nul A$ is implicitely defined; you're only given the condition $A\textbf{x} = \textbf{0}$ that vectors in the set must satisfy. & \textbf{2.}\ $\col A$ is explicitely defined; you're told how to build vectors in the set. \\
+		\textbf{3.}\ It takes time to find the necessary vectors. Row operations are required. & \textbf{3.}\ It easy to find vectors in the set. \\ 
+		\textbf{4.}\ There is no obvious relation between $\nul A$ and the entries in $A$. & \textbf{4.}\ There is an obvious relation between $\col A$ and $A$ since each column of $A$ is in the set. \\
+		\textbf{5.}\ A typical vector $\V$ in $\nul A$ has the property that $A\V = \textbf{0}.$ & \textbf{5.}\ A typical vector in $\col A$ has the property that the equation $A\textbf{x} = \textbf{v}$ is consistent. \\ 
+		\textbf{6.}\ Given a specific vector $\V$, it is easy to tell if $\V \in \nul A$, just compute $A\V$. & \textbf{6.}\ Given $\V$, it may take time and multiple row operations to tell if $\V \in \col A$. \\ 
+		\textbf{7.}\ $\nul A = \{\textbf{0}\} \iff A\textbf{x}=\textbf{0}$ has only the trivial solution. & \textbf{7.}\ $\col A = \R^m \iff A\textbf{x} = \textbf{b}$ has a solution $\forall \textbf{b} \in \R^m$. \\
+		\textbf{8.}\ $\nul A = \{\textbf{0}\} \iff \textbf{x} \mapsto A\textbf{x}$ is injectibe. & \textbf{8.}\ $\col A = \R^m \iff \textbf{x} \mapsto A\textbf{x}$ is surjective. \\
+		\hline
+	\end{tabular}
+	\subsubsection{The Row Space}
+	If $A$ is an $m \x n$ matrix, then its rows will be vectors of $n$ entries each (contained in $\R^n$). The row space of $A$ is the span of these $m$ rows such that 
+	$$\row A = \spa \left\{ \textbf{r}_1, \ldots, \textbf{r}_m \right\}$$
+	It is most natural to write these vector horizontally. 
+	\subsubsection{Kernel and Range of a Linear Transformation}
+	Subspaces of vector spaces other than $\R^n$ are often described in terms of a linear transformation rather than a matrix. 
+	\begin{defn}
+		A linear transformation $T$ from a vector space $V$ into a vector space $W$ is a rule that assigns every $\V \in V$ to a unique $T(\V) \in W$ such that
+		\begin{enumerate}
+			\itemsep0em
+			\item $T(\U + \V) = T(\U) + T(\V),\ \forall \U, \V \in V$, and
+			\item $T(c\U) = cT(\U),\ \forall \U \in V, c \in \R$
+		\end{enumerate}
+		We say that $T$ is a linear operator because of these rules. 
+	\end{defn}
+	\begin{thm}
+		We can define the following subspaces
+		\begin{enumerate}
+			\item $\hbox{Range} \subseteq \hbox{Codomain}$
+			\item $\hbox{Kernel} \subseteq \hbox{Domain}$
+		\end{enumerate}
+	\end{thm}
+	\begin{defn}
+		The kernel (or null space) of $T$ is the set of all $\V \in V$ such that $T(\V) = \textbf{0}$. If the linear transformation has a matrix associated with it, then $\ker T = \nul A$. 
+	\end{defn}
+	\begin{ex}[Abstract Transformation]
+		Let $W = P_5$ and $V = P_6$ and we have some map $D: V \to W$. We also define that $D(p(t)) = p'(t)$. This is linear! We show that $D(p(t) + q(t)) = \frac{\den}{\den t}(p(t) + q(t)) = p'(t) + q'(t) + D(p(t)) + D(q(t))$.
+	\end{ex}
+	\begin{defn}
+		The set 
+		$$C^1(\mathbb{D}) = \{ f: \mathbb{D} \to \mathbb{R} \mid \text{$f$ is differentiable and $f^1$ is continuous} \}.$$
+	\end{defn}
+	So we have that 
+	\begin{align*}
+		C^2(\R) \text{ means $f: \R \to \R$ is twice differentiable and $f^2$ is continuous}\\
+		C^0(\R) \text{ means $f: \R \to \R$ is continuous}
+	\end{align*}
+	If we have some $T: C^2(\R) \to C^0(\R)$ and $D: C^n \to C^{n-1}$ and $y \in C^2(\R), \omega \in \R$, then we can define some $T(y) = y'' + \omega^2y = D(D(y)) + \omega^2y$. This happens to be linear. The kernel $\ker T = \{ y = C^2(\R) \mid T(y) = 0 \}$. 
+	
+	\subsection{L.I. Sets \& Bases}
+	Recall that the definition of linear independence states that the set $\{ \V_1, \ldots, \V_n \}$ is L.I. iff the only solution to the homogeneous linear combination is zero! 
+	\begin{thm}
+		We have the following properties
+		\begin{enumerate}
+			\itemsep0em
+			\item $\{\textbf{0}\}$ is L.D.
+			\item $\textbf{0} \in \{\textbf{v}\ldots\} \Rightarrow$ L.D.
+			\item If one vector $\V \in V$ is a linear combination of other vectors in the set, it is L.D.
+		\end{enumerate}
+	\end{thm}
+	\begin{ex}
+		Suppose we have that $p_1(t) = 1, p_2(t) = t, p_3(t) = 5-2t$. Is this set $\{p_1, p_2, p_3\}$ linearly independent? No; $p_3 = 5p_1 - 2p_2$. 
+	\end{ex}
+	\begin{ex}
+		We have some $V = C[0, \infty)$, $y_3(t) = \cos(t)\sin(t)$ and $y_4(t) = \sin(2t)$. What is the nature of $\{y_3, y_4\}$. Well we know that $\sin(2t) = 2\sin(t)\cos(t)$ such that $y_4(t) = 2y_3(t)$ and thus they are linearly dependent. 
+	\end{ex}
+	\begin{defn}[Basis]
+		We have some $H \subseteq V$ and a set of vectors $\mathcal{B} \in V$ , then $\mathcal{B}$ is a basis for $H$ iff
+		\begin{enumerate}
+			\itemsep0em
+			\item $\mathcal{B}$ is L.I.
+			\item $\spa\mathcal{B} = H$
+		\end{enumerate}
+	\end{defn}
+	\begin{ex}
+		We take that $H = V = \R^n$. We can use $\mathcal{B} = \{\mathbf{e}_1, \ldots, \mathbf{e}_n\}$ as a basis for $\R^n$. We can generalize that for some matrix $A \in M_{n \x n}$, the set of columns $\{\mathbf{a}_1, \ldots, \mathbf{a}_n\}$ is a basis iff $A$ is invertible. 
+	\end{ex}
+	\begin{ex}
+		What if $V = \mathbb{P}, H = \mathbb{P}_n$. We find that $\mathcal{B} = \{1, t, t^2, \ldots, t^n\}$ where $\text{Length }\mathcal{B} = n+1$. 
+		\begin{proof}
+			Is it the case that 
+			$$p(t) = c_0 1 + c_1 t + \cdots + c_n t^n = \mathbf{0}_\mathbb{P}$$
+			has only the trivial solution? Well we observe that $p^0(0) = c_0$, $p^1(0) = 1c_1$, and $p^2(0) = 2\cdot 1\cdot c_2$. So we deduce that 
+			$$p^{(j)}(0) = j!c_j$$
+		\end{proof}
+	\end{ex}
+	\begin{thm}[Spanning Sets]
+		If we have some $S = \{\V_1, \ldots, \V_p\}$ and $H = \spa S\ (\subseteq V)$, we have that
+		\begin{enumerate}
+			\itemsep0em
+			\item If one of the $\V_k$ vectors is a linear combination of other vectors in the set, then deleting it does not change the span. 
+			\item If $H \neq \{\mathbf{0}\}$, there exists $\mathcal{B} \subseteq S$ s.t. $\mathcal{B}$ is a basis for $H$. 
+		\end{enumerate}
+	\end{thm}
+	\begin{ex}
+		We show that 
+		\begin{align*}
+			S &= \{1, t, 2-3t\} \in \mathbb{P} \\ 
+			\spa S &= \mathbb{P}_1
+		\end{align*}
+	\end{ex}
+		So, if we have some set $S$ that spans $H$ but is linearly dependent, we can find which vectors in $S$ are L.D. and delete them from the set until we achieve $S$ as L.I.
+	\begin{ex}
+		We have that 
+		\begin{align*}
+			H = \spa\left\{ \begin{bmatrix}
+				0 \\ 2 \\ -1
+			\end{bmatrix}, \begin{bmatrix}
+				2 \\ 2 \\ 0
+			\end{bmatrix}, \begin{bmatrix}
+				-2 \\ 0 \\ -1
+			\end{bmatrix}, \begin{bmatrix}
+				2 \\ 4 \\ -1
+			\end{bmatrix} \right\}
+		\end{align*}
+		Observe that $\V_4 = \V_1 + \V_2$, meaning we should now observe $H \setminus \{\V_4\}$.
+		\begin{align*}
+			H = \spa\left\{ \begin{bmatrix}
+				0 \\ 2 \\ -1
+			\end{bmatrix}, \begin{bmatrix}
+				2 \\ 2 \\ 0
+			\end{bmatrix}, \begin{bmatrix}
+				-2 \\ 0 \\ -1
+			\end{bmatrix} \right\}
+		\end{align*} 
+		Now observe $\V_3 = \V_1 - \V_2$, meaning that 
+		\begin{align*}
+			H = \spa \{\V_1, \V_2, \V_3\} \setminus \{\V_3\} = \spa\{\V_1, \V_2\}
+		\end{align*}
+	\end{ex}		
+	\begin{ex}
+		We can find bases for the following sets. 
+		\begin{enumerate}[leftmargin=1cm]
+			\itemsep0em
+			\item[$\nul A$] Solve for free variables in $A\mathbf{x} = \mathbf{0}$
+			\item[$\col A$] The pivot columns of the original matrix $A$ are the basis
+			\item[$\row A$] The pivot rows of either matrix are the basis
+		\end{enumerate}
+		Note that if $A \sim B$, $\col B \neq \col A$ but $\row B = \row A$. 
+	\end{ex}
+	\begin{ex}
+		Suppose we have some
+		\begin{align*}
+			A = \begin{bmatrix}
+				1 & 4 & 0 & 2 & -1 \\
+				3 & 12 & 1 & 5 & 5 \\ 
+				2 & 8 & 1 & 3 & 2 \\ 
+				5 & 20 & 2 & 8 & 8
+			\end{bmatrix} \sim \begin{bmatrix}
+				1 & 4 & 0 & 2 & 0 \\ 
+				0 & 0 & 1 & -1 & 0 \\
+				0 & 0 & 0 & 0 & 1 \\ 
+				0 & 0 & 0 & 0 & 0
+			\end{bmatrix} = B
+		\end{align*}
+		$\row A = \row B = $ rows 1, 2, and 3. $\col A = $ columns 1, 3, and 5 of $A$. 
+	\end{ex}
+	\begin{note}
+		We know that if we start with a linearly dependent set and remove L.D. vectors we can slim it down to some basis $\mathcal{B}$. We can also do the reverse. Suppose we start with some L.I. set $T \subseteq H$, if $\spa T = H$, then we are done! If $T$ it not spanning $H$, we say $\spa T \subsetneq T$. If we add some vector $\V \notin \spa T$ to $T$, it stays L.I. but goes up in dimension. We can continue to test if this new $T$ spans $H$ and adding L.I. vectors if not. 
+	\end{note}
+	
+	\subsection{Dimension of Abstract Vector Spaces}
+	\begin{defn}
+		The size of a basis of $V$ is called its dimension. Recall that this does not depend on $\mathcal{B}$. 
+	\end{defn}
+	\begin{defn}
+		A vector space $V$ is called finite-dimensional if it has a basis with finitely many elements.
+	\end{defn}
+	\begin{ex}
+		$\dim(\mathbb{P}_n) = n+1$, $\dim(\mathbb{P}) = \infty$. 
+	\end{ex}
+	\begin{thm}
+		$H \subseteq V$ and is a subspace of $V$. Then $\dim(H) \leq \dim(V)$. 
+	\end{thm}
+	\begin{ex}
+		$V = \R^3$. If we take $H \subseteq V$, then the case where $H = \R^0$, we have that $\dim(H) = 0$. Both the cases of 1- and 2-dimensionality for $H$ also check out. 
+	\end{ex}
+	\begin{thm}
+		If $\dim(V) = p$ and $\len{S} = p$, then $S$ is a basis iff $S$ is L.I. and spanning of $V$. We know that if $S$ is L.I., then $S \subseteq \B$. 
+	\end{thm}
+	\begin{note}
+		If we have some $A \in M_{m\x n}$, we call $\dim(\nul A)$ the Nullity of $A$. 
+	\end{note}
+	\begin{thm}
+		$A$ is invertible iff $\col A = \R^n$, $A$ is full-rank, and the nullity of $A$ is zero. 
+	\end{thm}
+	
+	\section{Eigenvectors \& Eigenvalues}
+	\subsection{Eigenvectors \& Eigenvalues}
+	\begin{ex}
+		Let $A = \begin{bmatrix}
+			3 & -2 \\ 1 & 0
+		\end{bmatrix}, \U = \begin{bmatrix}
+			-1 \\ 1
+		\end{bmatrix}, \V = \begin{bmatrix}
+			2 \\ 1
+		\end{bmatrix}$. We observe that $A\V = 2\V$! This makes $\V$ an eigenvector; it gets scaled by some factor by the linear map (no change of direction). 
+	\end{ex}
+	\begin{defn}
+		An eigenvector of an $n \x n$ matrix $A$ is a nonzero vector $\V$ such that $A\V = \lambda\V$ for some $\lambda \in \R$. A scalar $\lambda$ is called an eigenvalue of $A$ if there is a nontrivial solution $\V$ of $A\V = \lambda\V$; such a $\V$ is called an eigenvector corresponding to $\lambda$. 
+	\end{defn}
+	\begin{note}
+		Eigenvalues can be zero. but eigenvectors cannot be the zero vector. 
+	\end{note}
+	\begin{ex}
+		Show that 7 is an eigenvalue of matrix $A$. 
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 6 \\ 5 & 2
+			\end{bmatrix}\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix} &= 7\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix} \\ 
+			\begin{bmatrix}
+				x_1 + 6x_2 \\ 
+				5x_1 + 2x_2
+			\end{bmatrix} &= \begin{bmatrix}
+				7x_1 \\ 7x_2
+			\end{bmatrix}
+		\end{align*}
+		We solve that $x_1 = x_2$ s.t. $A\begin{bmatrix}
+			1 \\ 1
+		\end{bmatrix} = 7\begin{bmatrix}
+			1 \\ 1
+		\end{bmatrix}$.
+	\end{ex}
+	\begin{proposition}
+		We can derive the following... 
+		\begin{enumerate}
+			\itemsep0em
+			\item $A\V = (\lambda I)\V$
+			\item $A = \lambda I$
+			\item $[A - \lambda I \mid \textbf{0}]$
+		\end{enumerate}
+	\end{proposition}
+	\begin{note}
+		We see that $\{k\V \mid k \in \R\}$ is just the span of $\V$. In fact, for some square matrix with eigenvalue $\lambda$, the set of eigenvectors forms a subspace (eigenspace of $A$ corresponding to $\lambda$). And because $(A-\lambda I)\V = \textbf{0} \iff \V \in \nul(A-\lambda I)$. 
+	\end{note}
+	\begin{note}
+		Afte finding an eigenvalue, the eigensace is a row-reduction problem. 
+	\end{note}
+	\begin{ex}
+		We are given that \begin{align*}
+			A = \begin{bmatrix}
+				4 & -1 & 6 \\ 
+				2 & 1 & 6 \\
+				2 & -1 & 8
+			\end{bmatrix}, \lambda = 2 \\ 
+			(A - 2I)\V = \textbf{0} \\ 
+			A-2I = \begin{bmatrix}
+				2 & -1 & 6 \\
+				2 & -1 & 6 \\ 
+				2 & -1 & 6 
+			\end{bmatrix} = \begin{bmatrix}
+				0 \\ 0 \\ 0
+			\end{bmatrix}
+		\end{align*}
+		We get that $2x_1 - x_2 + 6x_3 = 0$, thus $x_2, x_3$ are free variables. Our standard matrix would look like $\begin{bmatrix}
+			0.5x_2 - 3x_2 & x_2 & x_3
+		\end{bmatrix}^T$. 
+	\end{ex}
+	\begin{note}
+		Eigenspace of $\lambda = 2$ = Nullspace of $A-2I$
+	\end{note}
+	\begin{note}
+		What does it mean if $\lambda = 0$ is an eigenvalue? This is equivalent to the homogeneous system, and implies that it has nontrivial solutions! But what does the equation $A\V = \textbf{0}$ have nontrivial solution? When $\det A = 0$ or when $\text{rank}(A) < n$. 
+	\end{note}
+	\begin{note}
+		$\det(A - \lambda I) = 0 \forall \lambda$
+	\end{note}
+	
+	\subsection{The Characteristic Equation}
+	\begin{thm}
+		A scalar $\lambda$ is an eigenvalue of $A$ iff it satisfies 
+		$$\det(A - \lambda I) = 0.$$
+	\end{thm}
+	\begin{ex}
+		Find the characteristic equation of 
+		\begin{align*}
+			A = \begin{bmatrix}
+				5 & -2 & 6 & -1 \\
+				0 & 3 & -8 & 0 \\
+				0 & 0 & 5 & 4 \\
+				0 & 0 & 0 & 1
+			\end{bmatrix}\quad A-\lambda I = \begin{bmatrix}
+				5-\lambda & -2 & 6 & -2 \\
+				0 & 3-\lambda & -8 & 0 \\
+				0 & 0 & 5-\lambda & 4 \\
+				0 & 0 & 0 & 1-\lambda
+			\end{bmatrix}
+		\end{align*}
+		Observe that $\det(A-\lambda I) = (5-\lambda)^2(3-\lambda)(1-\lambda)$. This means that if $A$ is triangular, the eigenvalues are the diagonal entries. 
+	\end{ex}
+	\begin{note}
+		If $A$ is an $n \x n$ matrix, the characteristic polynomial will be of degree $n$. 
+	\end{note}
+	\begin{note}
+		The \textbf{algebraic multiplicity} of an eigenvalue is how many times it occurs as a zero.
+	\end{note}
+	\begin{note}
+		The number of eigenvalues w/ multiplicity $\leq$ n. 
+	\end{note}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
